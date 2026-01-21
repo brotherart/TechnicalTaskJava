@@ -19,12 +19,12 @@ public class HotelController {
     @Autowired
     private HotelService hotelService;
 
-    @GetMapping("/hotels")
+    @GetMapping
     public List<HotelShortInfo> getAllHotels() {
         return hotelService.getAllHotels();
     }
 
-    @GetMapping("/hotels/{id}")
+    @GetMapping("/{id}")
     public HotelFullInfo getHotelById(@PathVariable Long id) {
         return hotelService.getHotelById(id);
     }
@@ -38,12 +38,12 @@ public class HotelController {
         return hotelService.searchHotels(name, brand, city, country, amenities);
     }
 
-    @PostMapping("/hotels")
+    @PostMapping
     public HotelShortInfo createHotel(@RequestBody HotelCreateRequest request) {
         return hotelService.createHotel(request);
     }
 
-    @PostMapping("/hotels/{id}/amenities")
+    @PostMapping("{id}/amenities")
     public ResponseEntity<?> addAmenities(@PathVariable Long id, @RequestBody List<String> amenities) {
         hotelService.addAmenities(id, amenities);
         return ResponseEntity.ok().build();

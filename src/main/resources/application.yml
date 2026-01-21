@@ -4,35 +4,22 @@ server:
     context-path: /property-view
 
 spring:
-  application:
-    name: property-view-service
-
   datasource:
-    url: jdbc:h2:mem:hoteldb
-    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:./hoteldb
     username: sa
-    password: password
-
+    password: ''
   h2:
     console:
       enabled: true
       path: /h2-console
-
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
-    enabled: true
-
-logging:
-  level:
-    com.example.propertyview: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    defer-datasource-initialization: true
+  jackson:
+    serialization:
+      indent-output: true
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss

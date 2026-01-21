@@ -1,0 +1,27 @@
+### Создать новый отель
+POST http://localhost:8092/property-view/hotels
+Content-Type: application/json
+
+{
+  "name": "Hilton Moscow Leningradskaya",
+  "description": "Historic hotel",
+  "brand": "Hilton",
+  "address": {
+    "houseNumber": 21,
+    "street": "Kalanchevskaya Street",
+    "city": "Moscow",
+    "country": "Russia",
+    "postCode": "107078"
+  },
+  "contacts": {
+    "phone": "+7 495 626-28-28",
+    "email": "info@hilton-moscow.ru"
+  },
+  "arrivalTime": {
+    "checkIn": "15:00",
+    "checkOut": "12:00"
+  }
+}
+
+### Получить все отели (для проверки)
+GET http://localhost:8092/property-view/hotels
