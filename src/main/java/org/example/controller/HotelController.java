@@ -1,11 +1,13 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.DTO.HotelCreateRequest;
 import org.example.DTO.HotelFullInfo;
 import org.example.DTO.HotelShortInfo;
 import org.example.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +41,10 @@ public class HotelController {
     }
 
     @PostMapping
-    public HotelShortInfo createHotel(@RequestBody HotelCreateRequest request) {
-        return hotelService.createHotel(request);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<HotelShortInfo> createHotel(@Valid @RequestBody HotelCreateRequest request) {
+        HotelShortInfo createdHotel = hotelService.createHotel(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdHotel);
     }
 
     @PostMapping("{id}/amenities")
