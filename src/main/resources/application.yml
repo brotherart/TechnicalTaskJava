@@ -4,24 +4,34 @@ server:
     context-path: /property-view
 
 spring:
-  datasource:
-    url: jdbc:h2:file:./hoteldb
-    username: sa
-    password: ''
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+  profiles:
+    active: h2
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
-    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    drop-first: false
+    contexts: dev
+
+  sql:
+    init:
+      mode: never
+
   jackson:
     serialization:
       indent-output: true
       write-dates-as-timestamps: false
     default-property-inclusion: non_null
     date-format: yyyy-MM-dd HH:mm:ss
+
   mvc:
     static-path-pattern: /property-view/**

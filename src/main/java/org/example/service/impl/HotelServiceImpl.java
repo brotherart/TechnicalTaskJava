@@ -4,6 +4,7 @@ import org.example.DTO.HotelCreateRequest;
 import org.example.DTO.HotelFullInfo;
 import org.example.DTO.HotelShortInfo;
 import org.example.entity.Hotel;
+import org.example.exceptions.HotelNotFoundException;
 import org.example.repository.HotelRepository;
 import org.example.service.HotelService;
 
@@ -32,7 +33,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public HotelFullInfo getHotelById(Long id) {
         Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Hotel not found with id: " + id));
+                .orElseThrow(() -> new HotelNotFoundException("Hotel not found with id: " + id));
         return convertToFullInfo(hotel);
     }
 

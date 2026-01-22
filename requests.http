@@ -1,4 +1,3 @@
-### Создать новый отель
 POST http://localhost:8092/property-view/hotels
 Content-Type: application/json
 
@@ -23,5 +22,5 @@ Content-Type: application/json
   }
 }
 
-### Получить все отели (для проверки)
+###
 GET http://localhost:8092/property-view/hotels

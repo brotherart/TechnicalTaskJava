@@ -5,12 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.example.DTO.HotelCreateRequest;
 import org.example.DTO.HotelFullInfo;
 import org.example.DTO.HotelShortInfo;
+import org.example.exceptions.HotelNotFoundException;
 import org.example.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,5 +59,14 @@ public class HotelController {
     @GetMapping("/histogram/{param}")
     public Map<String, Long> getHistogram(@PathVariable String param) {
         return hotelService.getHistogram(param);
+    }
+
+    @ExceptionHandler(HotelNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Map<String, String>> handleHotelNotFound(HotelNotFoundException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", ex.getMessage());
+        response.put("timestamp", LocalDateTime.now().toString());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

@@ -1,0 +1,165 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-hotels-table
+      author: brotherart
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: hotels
+      changes:
+        - createTable:
+            tableName: hotels
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: varchar(2000)
+
+              - column:
+                  name: brand
+                  type: varchar(255)
+
+              - column:
+                  name: house_number
+                  type: integer
+
+              - column:
+                  name: street
+                  type: varchar(255)
+
+              - column:
+                  name: city
+                  type: varchar(255)
+
+              - column:
+                  name: country
+                  type: varchar(255)
+
+              - column:
+                  name: post_code
+                  type: varchar(255)
+
+              - column:
+                  name: phone
+                  type: varchar(255)
+
+              - column:
+                  name: email
+                  type: varchar(255)
+
+              - column:
+                  name: check_in
+                  type: varchar(255)
+
+              - column:
+                  name: check_out
+                  type: varchar(255)
+
+  - changeSet:
+      id: 002-create-amenities-table
+      author: brotherart
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: amenities
+      changes:
+        - createTable:
+            tableName: amenities
+            columns:
+              - column:
+                  name: hotel_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: amenity
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 003-add-foreign-key-amenities
+      author: brotherart
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            foreignKeyConstraintExists:
+              foreignKeyName: fk_amenities_hotel
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: amenities
+            baseColumnNames: hotel_id
+            referencedTableName: hotels
+            referencedColumnNames: id
+            constraintName: fk_amenities_hotel
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 004-insert-test-hotel-data
+      author: brotherart
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM hotels WHERE name = 'DoubleTree by Hilton Minsk'
+      changes:
+        - insert:
+            tableName: hotels
+            columns:
+              - column: {name: name, value: 'DoubleTree by Hilton Minsk'}
+              - column: {name: description, value: 'The DoubleTree by Hilton Hotel Minsk offers 193 luxurious rooms in the Belorussian capital and stunning views of Minsk city from the hotels 20th floor ...'}
+              - column: {name: brand, value: 'Hilton'}
+              - column: {name: house_number, valueNumeric: 9}
+              - column: {name: street, value: 'Pobediteley Avenue'}
+              - column: {name: city, value: 'Minsk'}
+              - column: {name: country, value: 'Belarus'}
+              - column: {name: post_code, value: '220004'}
+              - column: {name: phone, value: '+375 17 309-80-00'}
+              - column: {name: email, value: 'doubletreeminsk.info@hilton.com'}
+              - column: {name: check_in, value: '14:00'}
+              - column: {name: check_out, value: '12:00'}
+
+  - changeSet:
+      id: 005-insert-test-amenities-data
+      author: brotherart
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: >
+              SELECT COUNT(*) FROM amenities 
+              WHERE hotel_id = (SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')
+      changes:
+        - insert:
+            tableName: amenities
+            columns:
+              - column: {name: hotel_id, valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"}
+              - column: {name: amenity, value: 'Free parking'}
+
+        - insert:
+            tableName: amenities
+            columns:
+              - column: {name: hotel_id, valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"}
+              - column: {name: amenity, value: 'Free WiFi'}
+
+        - insert:
+            tableName: amenities
+            columns:
+              - column: {name: hotel_id, valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"}
+              - column: {name: amenity, value: 'Non-smoking rooms'}
