@@ -41,9 +41,9 @@ class HotelControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        hotelRepository.deleteAll(); // Очищаем базу перед каждым тестом
+        hotelRepository.deleteAll();
 
-        // Создаем тестовый отель
+
         testHotel = Hotel.builder()
                 .name("Test Hotel")
                 .description("Test Description")
@@ -126,7 +126,7 @@ class HotelControllerIntegrationTest {
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/hotels/{id}", testHotel.getId()))
-                .andExpect(jsonPath("$.amenities", hasSize(4))) // Было 2, добавили 2
+                .andExpect(jsonPath("$.amenities", hasSize(4)))
                 .andExpect(jsonPath("$.amenities", containsInAnyOrder("WiFi", "Parking", "Spa", "Gym")));
     }
 }
