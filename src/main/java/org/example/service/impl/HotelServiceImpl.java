@@ -43,10 +43,8 @@ public class HotelServiceImpl implements HotelService {
         List<Hotel> hotels;
 
         if (amenities != null && !amenities.isEmpty()) {
-            // Поиск по amenities
             hotels = hotelRepository.searchByAmenities(amenities, amenities.size());
 
-            // Дополнительная фильтрация по другим параметрам
             hotels = hotels.stream()
                     .filter(hotel ->
                             (name == null || hotel.getName().toLowerCase().contains(name.toLowerCase())) &&
@@ -55,7 +53,6 @@ public class HotelServiceImpl implements HotelService {
                                     (country == null || hotel.getAddress().getCountry().equalsIgnoreCase(country)))
                     .collect(Collectors.toList());
         } else {
-            // Поиск без amenities
             hotels = hotelRepository.searchHotels(name, brand, city, country);
         }
 
